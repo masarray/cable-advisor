@@ -4,8 +4,9 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  // Menggunakan base '/cable-advisor/' agar aset (JS/CSS) terbaca di GitHub Pages
-  base: mode === "production" ? "/cable-advisor/" : "/",
+ 
+base: process.env.VITE_BASE || "/",
+
   server: {
     host: "::",
     port: 8080,
