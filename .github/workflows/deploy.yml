@@ -19,17 +19,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20
-      - run: npm ci
-      # Set VITE_BASE to "/<repo-name>/" — auto-derived from repository name.
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
       - name: Build
-        run: VITE_BASE="/${GITHUB_REPOSITORY#*/}/" npm run build
+        # Menggunakan VITE_BASE otomatis agar sesuai dengan vite.config.ts kamu sebelumnya
+        run: VITE_BASE="/${GITHUB_REPOSITORY#*/}/" bun run build
+
       - name: Copy 404 fallback (SPA)
         run: cp dist/index.html dist/404.html
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
